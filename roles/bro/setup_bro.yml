@@ -1,0 +1,111 @@
+####################################################################
+# Install Bro dependencies
+####################################################################
+- name: Install Bro dependencies
+  package:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - install 
+    - cmake 
+    - make 
+    - gcc 
+    - g++ 
+    - flex 
+    - bison 
+    - libpcap-dev 
+    - libssl-dev 
+    - python-dev 
+    - swig 
+    - zlib1g-dev
+
+####################################################################
+# Git Bro repo
+####################################################################
+- name: Create Bro directory
+  file:
+    path: /opt/bro
+    state: directory
+
+- name: Git Bro repo
+  git:
+    repo: 'git://git.bro.org/bro'
+    recursive: yes
+    dest: /opt/bro
+
+####################################################################
+# Compile Bro 
+####################################################################
+- name: ./configure Bro
+  shell: ./configure
+    chdir: /opt/bro
+
+- name: make Bro
+  make:
+    chdir: /opt/bro
+    
+- name: make install Bro
+  make:
+    chdir: /opt/bro
+    target: install
+
+####################################################################
+# Add Bro to path 
+####################################################################
+- name: Add Bro to path 
+ lineinfile:
+    path: /etc/enviornment
+    line: 'export PATH=/usr/local/bro/bin:$PATH'
+
+####################################################################
+# Set interface to promiscuous mode
+####################################################################
+- name: Set interface to promiscuous mode
+  shell: ip link set {{ bro_promiscuous_interface }} promisc on
+
+- name: Set interface to promiscuous mode ON boot
+  lineinfile:
+    path: /etc/rc.local
+    line: 'ip link set {{ bro_promiscuous_interface }} promisc on'
+
+####################################################################
+# Configure Bro
+####################################################################
+- name: Copy network.cfg 
+
+- name: Copy node.cfg 
+
+- name: Copy broctl.cfg 
+
+
+####################################################################
+# Set Bro to log in JSON format
+####################################################################
+- name: Set Bro to log in JSON format
+
+####################################################################
+# Start Bro 
+# Credit for service file: https://gist.github.com/JustinAzoff/db71b901b1070a88f2d72738bf212749
+####################################################################
+- name: Copy SystemD module
+  template:
+    src: conf/bro/bro.service
+    det: /etc/systemd/system/bro.service
+    owner: root
+    group: root
+
+- name: Start Bro service
+  service:
+    name: bro
+    state: restarted
+    enabled: yes
+
+####################################################################
+#  Slack notification
+####################################################################
+- name: Send slack notification when done
+  slack:
+    token: "{{ slack_token }}"
+    msg: '{{ ansible_nodename }}:{{ ansible_default_ipv4.address }} - Finished setting up Bro on {{ ansible_nodename }}'
+    channel: "{{ slack_channel }}"
+  when: slack_token is undefined

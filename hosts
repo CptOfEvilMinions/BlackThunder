@@ -1,0 +1,5 @@
+[bro-node]
+bro ansible_host=10.150.100.126 ansible_python_interpreter=/usr/bin/python3
+
+[graylog-server]
+graylog ansible_host=10.150.100.128 ansible_python_interpreter=/usr/bin/python3

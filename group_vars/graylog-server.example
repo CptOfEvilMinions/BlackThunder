@@ -1,0 +1,3 @@
+######################### Graylog setup #########################
+graylog_url: 'https://packages.graylog2.org/repo/packages/graylog-2.4-repository_latest.deb'
+graylog_admin_password: 

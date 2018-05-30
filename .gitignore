@@ -1,0 +1,8 @@
+*.retry
+group_vars/all
+group_vars/graylog-server
+group_vars/bro-node
+group_vars/windows
+.DS_Store
+*.pyc
+env/

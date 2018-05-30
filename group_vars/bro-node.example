@@ -1,0 +1,4 @@
+######################### Bro setup #########################
+bro_management_interface: 
+bro_promiscuous_interface: 
+bro_local_network:
