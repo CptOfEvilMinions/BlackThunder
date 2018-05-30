@@ -21,13 +21,13 @@ Threat hunting repo for my independent study on network threat hunting with Bro.
 ## Bro
 THE INSTANCE MUST HAVE TWO INTERFACES!!!!
 
-0. vim group_vars/bro and set:
+0. mv group_vars/bro-node.example group_vars/bro-node
+0. vim group_vars/bro-node and set:
     1. bro_management_interface - interface used to access the machine via SSH
     1. bro_promiscuous_interface - interface used to monitor network traffic
-0. 
-
-
-
+    1. bro_local_network - Local network in CIDR notation that Bro will monitor
+    1. bro_mail_to - Place to send e-mail alerts from BRO
+0. ansible-playbook -i hosts deploy_bro.yml -u [username]
 
 
 ## Supported operating systems
